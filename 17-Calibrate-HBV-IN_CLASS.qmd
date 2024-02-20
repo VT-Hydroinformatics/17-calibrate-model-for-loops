@@ -1,16 +1,24 @@
+---
+title: "17 - Calibrate HBV"
+format:
+  html: 
+    self-contained: true
+---
+
 # Intro to Modeling - Calibrate HBV {#modelingcalibration}
 
 ## Introduction
 
-The following activity is available as a template github repository at the following link: 
+The following activity is available as a template github repository at the following link:
+<https://github.com/VT-Hydroinformatics/17-calibrate-model-for-loops>
 
 *Goals for this activity:*
 
-* Learn how for loops work
-* Use for loops to calibrate the HBV model using the Monte Carlo technique
-* Assess the results of the calibration, discuss equifinality
+-   Learn how for loops work
+-   Use for loops to calibrate the HBV model using the Monte Carlo technique
+-   Assess the results of the calibration, discuss equifinality
 
-We saw in the last activity that coming up with the parameters that create a model that fits our watershed discharge best is hard. For this reason, there are several ways people have devised for automating the process. We are going to explore one: a Monte Carlo calibration. 
+We saw in the last activity that coming up with the parameters that create a model that fits our watershed discharge best is hard. For this reason, there are several ways people have devised for automating the process. We are going to explore one: a Monte Carlo calibration.
 
 To use this approach, we will create a ton of random parameter sets, run the model for each, and then see which one fits best. The idea is that by creating a bunch of random sets of parameters, we will end up with at least one that works well. As you might guess, this can take a while. We will just do this for 100 or 1000 runs here in this activity, but we will also explore some output from a 100,000 run Monte Carlo that I ran and saved.
 
@@ -24,34 +32,37 @@ library(GGally) #for making parallel coordinate plot
 
 theme_set(theme_classic())
 ```
-In order to do what we are going to do, we need "for" loops. 
 
-A for loop is a way to run a chunk of code several times while changing a value in that chunk of code each time. 
+In order to do what we are going to do, we need "for" loops.
 
-So using an example from class: you could run some code that downloads data from a USGS gage, and each time through the loop it changes which gage you download. 
+A for loop is a way to run a chunk of code several times while changing a value in that chunk of code each time.
+
+So using an example from class: you could run some code that downloads data from a USGS gage, and each time through the loop it changes which gage you download.
 
 In R, the syntax for this is
 
->for(x in sequence){\
->x\
->}\
+> for(x in sequence){\
+> x\
+> }\
 
-Where x will change every time you go through the loop. The values x will have each time through the loop are those that are in "sequence" above. If you changed this to x in 1:3, x would have values of 1, 2, and 3 each time through. If you made it x in c(2,3,5) x would change to 2, then 3, and then 5 each time through the loop. You can make the sequence anything and x can have any name so "letter in c(a, b, c)" would have *letter* change to a, then b, then c each time through the loop. 
+Where x will change every time you go through the loop. The values x will have each time through the loop are those that are in "sequence" above. If you changed this to x in 1:3, x would have values of 1, 2, and 3 each time through. If you made it x in c(2,3,5) x would change to 2, then 3, and then 5 each time through the loop. You can make the sequence anything and x can have any name so "letter in c(a, b, c)" would have *letter* change to a, then b, then c each time through the loop.
 
 The image below shows a short example of how a for loop works.
 
-![for loop](images/for loop.png "for loop")
-Let's try some examples
+![for loop](images/for%20loop.png "for loop") Let's try some examples
+
 ```{r}
+
 
 ```
 
 ## Challenge: Write a for loop
+
 Define a vector with values 5, 6, 7, 8, 9
 
 Create a for loop that steps through this vector and adds 1 to each value.
 
-Yes, you can do this by just typing the name of the vector + 1, but that's not the point! 
+Yes, you can do this by just typing the name of the vector + 1, but that's not the point!
 
 ```{r}
 
@@ -59,7 +70,7 @@ Yes, you can do this by just typing the name of the vector + 1, but that's not t
 
 ## Prep data for HBV
 
-Since we did this in the last chapter, we are just going to quickly run the code the preps our data to go into the model. Below we load the HBV movdel and make vectors of P, Qobs, and Temp.
+Since we did this in the last chapter, we are just going to quickly run the code the preps our data to go into the model. Below we load the HBV model and make vectors of P, Qobs, and Temp.
 
 ```{r}
 #Create the HBV function with the HBV R file
@@ -129,20 +140,33 @@ Below is a table of the parameters for the HBV model and their suggested min and
 
 You can do this by generating the set of parameters each time you run the model, but we are going to do it separately so we can see the Nashe-Sutcliff efficiency (NSE) for each set of parameters.
 
-Object Name | Min    | Max   | Description 
------------ | ------ | ----- | ------------ 
-FC          | 40     | 400   | Max soil moisture storage, field capacity
-beta        | 1      | 6     | Shape coefficient governing fate of water input to soil moisture storage
-LP          | .3     | 1     | Threshold for reduction of evaporation
-SFCF        | 0.4    | 1.2   | Snowfall correction factor
-TT          | -1.5   | 1.2   | Threshold temperature
-CFMAX       | 1      | 8     | Degree-day factor
-k0          | 0.05   | 0.5   | Recession constant (upper storage, near surface)
-k1          | 0.01   | 0.3   | Recession constant (upper storage)
-k2          | 0.001  | 0.15  | Recession constant (lower storage)
-UZL         | 0      | 70    | Threshold for shallow storage
-PERC        | 0      | 4     | Percolation, max flow from upper to lower storage
-MAXBAS      | 1      | 3     | base of the triangular routing function, days"
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| Object Name          | Min       | Max     | Description                                                              |
++======================+===========+=========+==========================================================================+
+| FC                   | 40        | 400     | Max soil moisture storage, field capacity                                |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| beta                 | 1         | 6       | Shape coefficient governing fate of water input to soil moisture storage |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| LP                   | .3        | 1       | Threshold for reduction of evaporation                                   |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| SFCF                 | 0.4       | 1.2     | Snowfall correction factor                                               |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| TT                   | -1.5      | 1.2     | Threshold temperature                                                    |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| CFMAX                | 1         | 8       | Degree-day factor                                                        |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| k0                   | 0.05      | 0.5     | Recession constant (upper storage, near surface)                         |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| k1                   | 0.01      | 0.3     | Recession constant (upper storage)                                       |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| k2                   | 0.001     | 0.15    | Recession constant (lower storage)                                       |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| UZL                  | 0         | 70      | Threshold for shallow storage                                            |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| PERC                 | 0         | 4       | Percolation, max flow from upper to lower storage                        |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
+| MAXBAS               | 1         | 3       | base of the triangular routing function, days"                           |
++----------------------+-----------+---------+--------------------------------------------------------------------------+
 
 To make our parameter sets, we first have to decide how many model runs we want to try. Let's try 100 so we don't burn down anyone's computer.
 
@@ -157,8 +181,8 @@ We will also create a blank vector of the same length which we will populate wit
 
 
 # PARAMETERS RANGE and generate set
-FC    <-   #Max soil moisture storage, field capacity
-beta  <-    #Shape coefficient governing fate of water input to soil moisture storage
+      #Max soil moisture storage, field capacity
+    #Shape coefficient governing fate of water input to soil moisture storage
 LP    <- runif(N, min = 0.3   , max = 1)    #Threshold for reduction of evap
 SFCF  <- runif(N, min = 0.4  , max = 1.2)  #Snowfall correction factor
 TT    <- runif(N, min = -1.5 , max = 1.2)  #Threshold temperature
@@ -175,9 +199,7 @@ MAXBAS<- rep(1, N)   #base of the triangular routing function, days
 
 routing <- 0
 
-pars <- cbind(FC, beta, LP, SFCF, 
-               TT, CFMAX, k0, k1, 
-               k2, UZL, PERC, MAXBAS, NSE) 
+
 ```
 
 ## Run the model for each parameter set
@@ -186,42 +208,23 @@ Alright, let's get at this. We now have our random sets of parameters. So we wil
 
 Here's how we will do that:
 
-First: Define the period for which we want to calculate NSE. Remember we are going to drop the first 40% of the model run to let the model "warm up". Since we are starting with nothing in the storages we need to let the boxes 
-"fill up" and settle in.
+First: Define the period for which we want to calculate NSE. Remember we are going to drop the first 40% of the model run to let the model "warm up". Since we are starting with nothing in the storages we need to let the boxes "fill up" and settle in.
 
 Then we run a FOR LOOP!
 
 Our for loop will step through a sequence of numbers from 1 to the total number of parameter sets we have. So in this case: 100. We will use i as our variable. So i will be 1, 2, 3.... all the way to 100.
 
-In the code portion of the loop, it will grab the parameters from row i of the parameter set we created. And pass that to the HBV function with the Precip, Temp, and PET data. Remember routing is just set to zero. 
+In the code portion of the loop, it will grab the parameters from row i of the parameter set we created. And pass that to the HBV function with the Precip, Temp, and PET data. Remember routing is just set to zero.
 
 After we run the model (still in the for loop) we will stick our observed values onto the results and then trip them to the period we want to evaluate. (drop the first 40%)
 
-Finally, we calculate NSE for that individual model run, and then add it into the NSE column we made before. So each run will just tack on an NSE value to the end of the paramter set. We don't need to save the model results, because we can just rerun the model with the same parameters and it'll give us the same output.
+Finally, we calculate NSE for that individual model run, and then add it into the NSE column we made before. So each run will just tack on an NSE value to the end of the parameter set. We don't need to save the model results, because we can just rerun the model with the same parameters and it'll give us the same output.
 
-The figure below illustrates how the for loop will work: 
+The figure below illustrates how the for loop will work:
 
-![monte carlo for loop](images/monte carlo for loop.png "Monte Carlo for loop")
+![monte carlo for loop](images/monte%20carlo%20for%20loop.png "Monte Carlo for loop")
 
 ```{r}
-#trim the first 40% (warm up) of Qobs off for NSE calculation 
-
-
-
-
-   
-   #call model with i parameter set generated above
-  
-   
-   #add the Qobs to results
-  
-   
-   #trim the first 40% of the record so it isn't included in the NSE calculation
-   
-    
-   #Calculate NSE and add to parameter set
-   
-   
 
 
 ```
@@ -230,7 +233,7 @@ The figure below illustrates how the for loop will work:
 
 Alright, now we have a NSE value that tells us how well each parameter set did at estimating runoff. So we need to find the best one!
 
-To do this, we will convert the parameter sets to a tibble, use filter to grab the row with the maximum NSE, then use slice to pull just that row out of the tibble. Finally, we will run as.numeric on the data to be sure everything is numbers. 
+To do this, we will convert the parameter sets to a tibble, use filter to grab the row with the maximum NSE, then use slice to pull just that row out of the tibble. Finally, we will run as.numeric on the data to be sure everything is numbers.
 
 Now we have our best parameter set, let's see how it did!
 
@@ -250,25 +253,21 @@ We will do what we did in the previous lesson: run the model with the parameter 
 
 ```
 
-Below we will look at the model run using plotly. First, we calculate the NSE again, just to be sure, and then plot the same way we did in the last lesson. 
+Below we will look at the model run using plotly. First, we calculate the NSE again, just to be sure, and then plot the same way we did in the last lesson.
 
 How did the model do? Did the 100 run Monte Carlo do better or worse than your manual attempts from last lesson?
 
 ```{r}
 #Calculate NSE
-NSE <- 1 - ((sum((OutputTrim$q - OutputTrim$WS_3) ^ 2)) / 
-                 sum((OutputTrim$WS_3 - mean(OutputTrim$WS_3)) ^ 2))
+
 
 #Create plot with NSE in title
-OutputTrim %>% plot_ly(x = ~DATE) %>% 
-        add_trace(y = ~q, name = 'Modeled',  type = 'scatter', mode = 'lines') %>% 
-        add_trace(y = ~WS_3, name = 'Measured', type = 'scatter', mode = 'lines') %>% 
-        layout(title=paste("NSE: ", round(NSE,2)))
+
 ```
 
-## Investigating a much bigger Monte Carlo 
+## Investigating a much bigger Monte Carlo
 
-The next couple of code chunks make plots from a Monte Carlo I ran with 100,000 parameter sets. 
+The next couple of code chunks make plots from a Monte Carlo I ran with 100,000 parameter sets.
 
 We will look at the two plots and discuss.
 
@@ -282,16 +281,13 @@ ggplot(pars100, aes(NSE))+
   geom_histogram()
 ```
 
-
 The chunk below creates a parallel coordinate plot. Each parameter is shown, but normalized, where 1 is it's maximum value from our random sets, and 0 is the minimum value.
 
 Each connected line is a set of parameters. The green line is the set that had the highest NSE.
 
-Look at this plot for a bit and discuss. 
+Look at this plot for a bit and discuss.
 
-Are there any parameters that were always in the same range for these runs? What does that tell you about them?
-Are there any parameters that look like they spanned almost the whole range for these runs? What doe sthat tell you about them?
-What does this plot tell you about the model's representation of the real world? 
+Are there any parameters that were always in the same range for these runs? What does that tell you about them? Are there any parameters that look like they spanned almost the whole range for these runs? What does that tell you about them? What does this plot tell you about the model's representation of the real world?
 
 ```{r}
 #filter the 100,000 run to the top ten
@@ -323,4 +319,3 @@ rankedpars %>% ggparcoord(columns = 1:11,
               ylab("normalized parameter values")+
               xlab("parameters")
 ```
-

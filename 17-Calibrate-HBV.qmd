@@ -1,8 +1,16 @@
+---
+title: "17 - Calibrate HBV"
+format:
+  html: 
+    self-contained: true
+---
+
 # Intro to Modeling - Calibrate HBV {#modelingcalibration}
 
 ## Introduction
 
 The following activity is available as a template github repository at the following link:
+<https://github.com/VT-Hydroinformatics/17-calibrate-model-for-loops>
 
 *Goals for this activity:*
 
@@ -82,7 +90,7 @@ Yes, you can do this by just typing the name of the vector + 1, but that's not t
 
 ## Prep data for HBV
 
-Since we did this in the last chapter, we are just going to quickly run the code the preps our data to go into the model. Below we load the HBV movdel and make vectors of P, Qobs, and Temp.
+Since we did this in the last chapter, we are just going to quickly run the code the preps our data to go into the model. Below we load the HBV model and make vectors of P, Qobs, and Temp.
 
 ```{r}
 #Create the HBV function with the HBV R file
@@ -232,7 +240,7 @@ In the code portion of the loop, it will grab the parameters from row i of the p
 
 After we run the model (still in the for loop) we will stick our observed values onto the results and then trip them to the period we want to evaluate. (drop the first 40%)
 
-Finally, we calculate NSE for that individual model run, and then add it into the NSE column we made before. So each run will just tack on an NSE value to the end of the paramter set. We don't need to save the model results, because we can just rerun the model with the same parameters and it'll give us the same output.
+Finally, we calculate NSE for that individual model run, and then add it into the NSE column we made before. So each run will just tack on an NSE value to the end of the parameter set. We don't need to save the model results, because we can just rerun the model with the same parameters and it'll give us the same output.
 
 The figure below illustrates how the for loop will work:
 
@@ -328,7 +336,7 @@ Each connected line is a set of parameters. The green line is the set that had t
 
 Look at this plot for a bit and discuss.
 
-Are there any parameters that were always in the same range for these runs? What does that tell you about them? Are there any parameters that look like they spanned almost the whole range for these runs? What doe sthat tell you about them? What does this plot tell you about the model's representation of the real world?
+Are there any parameters that were always in the same range for these runs? What does that tell you about them? Are there any parameters that look like they spanned almost the whole range for these runs? What does that tell you about them? What does this plot tell you about the model's representation of the real world?
 
 ```{r}
 #filter the 100,000 run to the top ten
