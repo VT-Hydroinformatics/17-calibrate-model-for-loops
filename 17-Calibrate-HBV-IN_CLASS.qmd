@@ -81,33 +81,33 @@ start <- mdy("01-01-2009")
 end <- mdy("12-31-2012")
 
 #Precip
-P1 <- read_csv("HBV/Pwd2009-2012.csv") %>% 
-         select(DATE, WS_3) %>%
-         mutate(DATE = ymd(DATE)) %>%
+P1 <- read_csv("HBV/Pwd2009-2012.csv") |> 
+         select(DATE, WS_3) |>
+         mutate(DATE = ymd(DATE)) |>
          filter(DATE >= start & DATE <= end)
 
 P <- P1$WS_3
 
 #Streamflow mm/d
-Qobs1 <- read_csv("HBV/SWD2009-2012.csv") %>%
-         select(DATE, WS_3) %>%
-         mutate(DATE = ymd(DATE)) %>%
+Qobs1 <- read_csv("HBV/SWD2009-2012.csv") |>
+         select(DATE, WS_3) |>
+         mutate(DATE = ymd(DATE)) |>
          filter(DATE >= start & DATE <= end)
 
 Qobs <- Qobs1$WS_3
 
 #Temp in deg C
-Temp1 <- read_csv("HBV/Tdm2009-2012.csv")%>%
-         select(DATE, STA_1) %>%
-         mutate(DATE = ymd(DATE)) %>%
+Temp1 <- read_csv("HBV/Tdm2009-2012.csv")|>
+         select(DATE, STA_1) |>
+         mutate(DATE = ymd(DATE)) |>
          filter(DATE >= start & DATE <= end)
 
 Temp <- Temp1$STA_1
 
 #Snow in SWE, mm
-snow <- read_csv("HBV/sno2009-2012.csv") %>%
-         select(DATE, STA2) %>%
-         mutate(DATE = ymd(DATE)) %>%
+snow <- read_csv("HBV/sno2009-2012.csv") |>
+         select(DATE, STA2) |>
+         mutate(DATE = ymd(DATE)) |>
          filter(DATE >= start & DATE <= end)
 ```
 
@@ -119,14 +119,14 @@ Again, because we did this last time, we will just re-run this code to create ou
 lat <- 43 + 57/60 #43 degrees and 57 minutes
 latrad <- (lat/360) * 2 * pi #convert to radians
 
-PET1 <- select(Temp1, DATE) %>%
-         mutate(DOY = yday(DATE)) %>% #DOY for dates
-         mutate(tempvar = (2 * pi / 365) * DOY) %>%
+PET1 <- select(Temp1, DATE) |>
+         mutate(DOY = yday(DATE)) |> #DOY for dates
+         mutate(tempvar = (2 * pi / 365) * DOY) |>
          #declination of the sun above the celestial equator in 
          #radians on day JulDay of the year
-         mutate(delta_h = 0.4093 * sin(tempvar - 1.405)) %>% 
+         mutate(delta_h = 0.4093 * sin(tempvar - 1.405)) |> 
          #day length in h
-         mutate(daylen = (2 * acos(-tan(delta_h) * tan(latrad)) / 0.2618)) %>% 
+         mutate(daylen = (2 * acos(-tan(delta_h) * tan(latrad)) / 0.2618)) |> 
          mutate(
            PET = 29.8 * daylen * 0.611 * exp(17.3 * Temp / 
                   (Temp + 237.3)) / (Temp + 273.2))  #PET Hamon method
@@ -301,16 +301,16 @@ maxs <- c(400, 6, 1, 1.2, 1.2, 8, 0.5, 0.3, 0.15, 70 , 4, 3, 0, 0)
 rankedpars <- rbind(rankedpars, mins, maxs)
 
 #Make NSE a character so the legend will work properly
-rankedpars <- rankedpars %>% mutate(NSE = as.character(round(NSE, 2)))
+rankedpars <- rankedpars |> mutate(NSE = as.character(round(NSE, 2)))
 
 #Make the NSE equal "Min/Max" for appropriate legend labels
 rankedpars$NSE[rankedpars$NSE == "0"] <- "Min/Max"
 
 #Make the ranks a factor datatype
-rankedpars <- rankedpars %>% mutate(ranks = factor(ranks))
+rankedpars <- rankedpars |> mutate(ranks = factor(ranks))
 
 #Create parallel coordinate plot
-rankedpars %>% ggparcoord(columns = 1:11, 
+rankedpars |> ggparcoord(columns = 1:11, 
               groupColumn = 13,
               showPoints = TRUE,
               scale = "uniminmax") +
