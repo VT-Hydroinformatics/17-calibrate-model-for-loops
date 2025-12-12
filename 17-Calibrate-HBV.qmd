@@ -1,11 +1,9 @@
 ---
 title: "Chapter 17: Calibrate HBV"
 date: today
-github: https://github.com/VT-Hydroinformatics/17-calibrate-model-for-loops
 author:
   - name: JP Gannon
     orcid: 0000-0002-4595-3214
-    github: jpgannon
     url: https://jpgannon.github.io/
     affiliation: 
       - name: Virginia Tech
@@ -14,9 +12,10 @@ format:
   html: 
     self-contained: true
   ipynb:
-      nb-frontmatter: true
-jupyter: 
-  kernel: ir
+    nb-frontmatter: true
+    jupyter:
+      kernel: ir
+      ipynb-shell-interactivity: all
 execute: 
   enabled: true
 ---
@@ -65,13 +64,7 @@ Where x will change every time you go through the loop. The values x will have e
 
 The image below shows a short example of how a for loop works.
 
-::: {#fig-for-loop .captioned-figure}
-<img src="./images/for-loop.png" alt="For loop" width="1000">
-
-For loop
-:::
-
-Let's try some examples
+![for loop](images/for%20loop.png "for loop") Let's try some examples
 
 ```{r}
 val <- 0
@@ -266,11 +259,7 @@ Finally, we calculate NSE for that individual model run, and then add it into th
 
 The figure below illustrates how the for loop will work:
 
-::: {#fig-for-loop .captioned-figure}
-<img src="./images/monte-carlo-for-loop.png" alt="Monte carlo for loop]" width="1000">
-
-Monte carlo for loop]
-:::
+![monte carlo for loop](images/monte%20carlo%20for%20loop.png "Monte Carlo for loop")
 
 ```{r}
 #trim the first 40% (warm up) of Qobs off for NSE calculation 
