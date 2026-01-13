@@ -20,7 +20,7 @@ execute:
   enabled: true
 ---
 
-# Intro to Modeling - Calibrate HBV {#modelingcalibration}
+# Intro to Modeling - Calibrate HBV
 
 ## Introduction
 
@@ -64,7 +64,10 @@ Where x will change every time you go through the loop. The values x will have e
 
 The image below shows a short example of how a for loop works.
 
-![](images/for%20loop.png "for loop") Let's try some examples
+![for loop](images/for loop.png "for loop")\
+_for loop_
+
+Let's try some examples
 
 ```{r}
 val <- 0
@@ -259,7 +262,8 @@ Finally, we calculate NSE for that individual model run, and then add it into th
 
 The figure below illustrates how the for loop will work:
 
-![](images/monte%20carlo%20for%20loop.png "Monte Carlo for loop")
+![Monte Carlo for loop](images/monte carlo for loop.png "Monte Carlo for loop")\
+_Monte Carlo for loop_
 
 ```{r}
 #trim the first 40% (warm up) of Qobs off for NSE calculation 
