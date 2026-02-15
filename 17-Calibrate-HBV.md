@@ -1,6 +1,6 @@
 # Chapter 17: Calibrate HBV
 JP Gannon
-2026-02-12
+2026-02-15
 
 # Intro to Modeling - Calibrate HBV
 
@@ -68,7 +68,7 @@ anything and x can have any name so “letter in c(a, b, c)” would have
 
 The image below shows a short example of how a for loop works.
 
-![](images/for%20loop.png "for loop")
+![](images/forloop.png "for loop")
 
 *for loop*
 
@@ -342,7 +342,7 @@ and it’ll give us the same output.
 
 The figure below illustrates how the for loop will work:
 
-![](images/monte%20carlo%20for%20loop.png "Monte Carlo for loop")
+![](images/monte-carlo-for-loop.png "Monte Carlo for loop")
 
 *Monte Carlo for loop*
 
@@ -455,7 +455,7 @@ ggplot(pars100, aes(NSE))+
   geom_histogram()
 ```
 
-    `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+    `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](17-Calibrate-HBV_files/figure-commonmark/unnamed-chunk-10-1.png)
 
